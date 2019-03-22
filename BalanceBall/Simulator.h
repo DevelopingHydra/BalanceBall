@@ -8,19 +8,25 @@
 class Simulator
 {
 public:
-	Simulator(unsigned int canvasWidth, unsigned int canvasHeight);
+	Simulator(sf::Vector2u screenSize);
 	~Simulator();
 
-	void onWindowResized(unsigned int newWidth, unsigned int newHeight);
+	void onWindowResized(sf::Vector2u newScreenSize);
 	void update();
+	void resetSimulation();
+	void onKeyPressed(char keyCode);
 
 	std::vector<std::shared_ptr<sf::Shape>> getShapes();
 
 private:
 	std::vector<std::shared_ptr<sf::Shape>> drawables;
 
+	const sf::Vector2f gravity{ 0, -9.81f };
 	Ball ball;
 
-	unsigned int canvasWidth, canvasHeight;
+	sf::Vector2u currentScreenSize;
+
+	void pushBallLeft();
+	void pushBallRight();
 };
 

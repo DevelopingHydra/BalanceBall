@@ -1,25 +1,67 @@
 #include "Simulator.h"
+#include <iostream>
 
-Simulator::Simulator(unsigned int canvasWidth, unsigned int canvasHeight) :canvasWidth{ canvasWidth }, canvasHeight{ canvasHeight }, ball{ {canvasWidth, canvasHeight} }
+Simulator::Simulator(sf::Vector2u screenSize)
+	:currentScreenSize{ screenSize }, ball{ screenSize }
 {
+	this->drawables.push_back(std::make_shared<sf::CircleShape>(ball.getShape()));
 }
 
 Simulator::~Simulator()
 {
 }
 
-void Simulator::onWindowResized(unsigned int newWidth, unsigned int newHeight)
+void Simulator::onWindowResized(sf::Vector2u newScreenSize)
 {
-	this->ball.onScreenResized({ this->canvasWidth, this->canvasHeight }, { newWidth, newHeight });
+	this->ball.onScreenResized(this->currentScreenSize, newScreenSize);
 
-	this->canvasWidth = newWidth;
-	this->canvasHeight = newHeight;
+	this->currentScreenSize = newScreenSize;
 }
 
 void Simulator::update()
 {
+	//this->ball.applyForce(gravity);
+
 	this->ball.update();
 }
+
+void Simulator::resetSimulation()
+{
+	this->ball.reset(this->currentScreenSize);
+	std::cout << "Resetting simulation\n";
+}
+
+void Simulator::onKeyPressed(char keyCode)
+{
+	switch (keyCode) {
+	case 'r':
+		this->resetSimulation();
+		break;
+	case 72:
+		this->pushBallRight();
+		break;
+	case 71:
+		this->pushBallLeft();
+		break;
+	default:
+		std::cout << "!!! unrecognized key code!\n";
+	}
+}
+
+void Simulator::pushBallLeft()
+{
+	this->ball.applyForce({ -5,0 });
+	std::cout << "push ball left\n";
+}
+
+void Simulator::pushBallRight()
+{
+	this->ball.applyForce({ 5,0 });
+	std::cout << "push ball right\n";
+}
+
+
+
 
 std::vector<std::shared_ptr<sf::Shape>> Simulator::getShapes()
 {

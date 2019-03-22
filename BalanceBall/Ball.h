@@ -11,6 +11,7 @@ public:
 	void onScreenResized(sf::Vector2u oldSize, sf::Vector2u newSize);
 	void applyForce(sf::Vector2f force);
 	void update();
+	void reset(sf::Vector2u screenSize);
 
 	sf::CircleShape getShape();
 
