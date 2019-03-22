@@ -1,9 +1,9 @@
 #include "GUI.h"
 #include <iostream>
 
-GUI::GUI()
+GUI::GUI() :window{ sf::VideoMode(800,500), "Balance-ball" }, simulator{ 800,500 }
 {
-	this->initialize();
+	this->window.setVisible(false);
 }
 
 GUI::~GUI()
@@ -14,16 +14,6 @@ void GUI::show()
 {
 	this->window.setVisible(true);
 	this->renderLoop();
-}
-
-void GUI::initialize()
-{
-	sf::VideoMode desktopMode = sf::VideoMode().getDesktopMode();
-	sf::RenderWindow window_(sf::VideoMode(desktopMode.width / 2, desktopMode.height / 2), "BlanceBall GUI");
-	this->window = window_;
-	this->renderLoop();
-
-	std::cout << window.isOpen();
 }
 
 void GUI::renderLoop()
@@ -38,7 +28,11 @@ void GUI::renderLoop()
 			case sf::Event::Closed:
 				window.close();
 				break;
+			case sf::Event::Resized:
+				this->simulator.onWindowResized(event.size.width, event.size.height);
+				break;
 			case sf::Event::KeyReleased:
+				std::cout << event.key.code;
 				break;
 			default:
 				break;
@@ -46,6 +40,15 @@ void GUI::renderLoop()
 		}
 
 		window.clear();
+		this->renderAllOjbects();
 		window.display();
+	}
+}
+
+void GUI::renderAllOjbects()
+{
+	this->simulator.update();
+	for (auto& shape : this->simulator.getShapes()) {
+		this->window.draw(*shape);
 	}
 }

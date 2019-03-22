@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Simulator.h"
 
 class GUI
 {
@@ -12,6 +13,8 @@ public:
 
 private:
 	sf::RenderWindow window;
-	void initialize();
+	Simulator simulator;
+
 	void renderLoop();
+	void renderAllOjbects();
 };

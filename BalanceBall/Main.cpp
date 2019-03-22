@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include <iostream>
-#include <SFML/Graphics.hpp>
 
 #include "GUI.h"
 
