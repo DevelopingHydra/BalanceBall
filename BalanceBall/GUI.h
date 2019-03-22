@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 class GUI
 {
@@ -8,8 +8,10 @@ public:
 	GUI();
 	~GUI();
 
-	void initialize();
+	void show();
 
 private:
-
+	sf::RenderWindow window;
+	void initialize();
+	void renderLoop();
 };
