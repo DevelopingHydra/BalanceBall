@@ -4,7 +4,6 @@
 Simulator::Simulator(sf::Vector2u screenSize)
 	:currentScreenSize{ screenSize }, ball{ screenSize }
 {
-	this->drawables.push_back(std::make_shared<sf::CircleShape>(ball.getShape()));
 }
 
 Simulator::~Simulator()
@@ -34,7 +33,7 @@ void Simulator::resetSimulation()
 void Simulator::onKeyPressed(char keyCode)
 {
 	switch (keyCode) {
-	case 'r':
+	case 17:
 		this->resetSimulation();
 		break;
 	case 72:
@@ -46,6 +45,11 @@ void Simulator::onKeyPressed(char keyCode)
 	default:
 		std::cout << "!!! unrecognized key code!\n";
 	}
+}
+
+sf::CircleShape Simulator::getBall()
+{
+	return this->ball.getShape();
 }
 
 void Simulator::pushBallLeft()
@@ -62,8 +66,3 @@ void Simulator::pushBallRight()
 
 
 
-
-std::vector<std::shared_ptr<sf::Shape>> Simulator::getShapes()
-{
-	return this->drawables;
-}

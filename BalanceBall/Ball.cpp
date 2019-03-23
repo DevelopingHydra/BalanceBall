@@ -24,13 +24,13 @@ void Ball::applyForce(sf::Vector2f force)
 
 void Ball::update()
 {
-	//this->shape.move(this->speed);
-	this->shape.setPosition(shape.getPosition() + this->speed);
+	this->shape.move(this->speed);
+	//this->shape.setPosition(shape.getPosition() + this->speed);
 	this->speed += this->acceleration;
 	this->acceleration = { 0,0 };
 
-	std::cout << acceleration.x << "," << acceleration.y << " - "
-		<< speed.x << "," << speed.y << " - " << shape.getPosition().x << "," << shape.getPosition().y << "\n";
+	//std::cout << acceleration.x << "," << acceleration.y << " - "
+	//	<< speed.x << "," << speed.y << " - " << shape.getPosition().x << "," << shape.getPosition().y << "\n";
 }
 
 void Ball::reset(sf::Vector2u screenSize)

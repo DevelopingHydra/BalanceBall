@@ -40,7 +40,7 @@ void GUI::renderLoop()
 			}
 		}
 
-		//window.clear(sf::Color::White);
+		window.clear(sf::Color::White);
 		this->renderAllOjbects();
 		window.display();
 	}
@@ -49,9 +49,5 @@ void GUI::renderLoop()
 void GUI::renderAllOjbects()
 {
 	this->simulator.update();
-	for (auto& shape : this->simulator.getShapes()) {
-		//shape->setPosition({ (float)window.getSize().x / 2, 100 });
-		//std::cout << shape->getPosition().x << " - " << shape->getPosition().y << "\n";
-		this->window.draw(*shape);
-	}
+	this->window.draw(this->simulator.getBall());
 }

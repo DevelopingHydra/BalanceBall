@@ -16,11 +16,8 @@ public:
 	void resetSimulation();
 	void onKeyPressed(char keyCode);
 
-	std::vector<std::shared_ptr<sf::Shape>> getShapes();
-
+	sf::CircleShape getBall();
 private:
-	std::vector<std::shared_ptr<sf::Shape>> drawables;
-
 	const sf::Vector2f gravity{ 0, -9.81f };
 	Ball ball;
 
