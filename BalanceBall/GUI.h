@@ -15,6 +15,8 @@ private:
 	sf::RenderWindow window;
 	Simulator simulator;
 
+	const int targetFramerate = 30;
+
 	void renderLoop();
 	void renderAllOjbects();
 };

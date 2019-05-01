@@ -36,6 +36,9 @@
     <ClCompile Include="Simulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Seesaw.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="Simulator.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Seesaw.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObject.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

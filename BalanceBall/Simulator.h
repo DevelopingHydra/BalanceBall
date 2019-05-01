@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Ball.h"
+#include "Seesaw.h"
 
 class Simulator
 {
@@ -16,12 +17,15 @@ public:
 	void resetSimulation();
 	void onKeyPressed(char keyCode);
 
-	sf::CircleShape getBall();
+	std::shared_ptr<sf::Shape> getBall();
+	std::shared_ptr<sf::Shape> getSeesaw();
 private:
-	const sf::Vector2f gravity{ 0, -9.81f };
+	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of draw-coordinate system
 	Ball ball;
+	Seesaw seesaw;
 
 	sf::Vector2u currentScreenSize;
+	bool isRunning;
 
 	void pushBallLeft();
 	void pushBallRight();

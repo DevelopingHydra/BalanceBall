@@ -1,9 +1,15 @@
 #include "GUI.h"
 #include <iostream>
 
-GUI::GUI() :window{ sf::VideoMode(800,500), "Balance-ball" }, simulator{ {800,500} }
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 500
+
+GUI::GUI()
+	:window{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Balance-ball", sf::Style::Titlebar | sf::Style::Close },
+	simulator{ {WINDOW_WIDTH, WINDOW_HEIGHT} }
 {
 	this->window.setVisible(false);
+	this->window.setFramerateLimit(30);
 	this->simulator.resetSimulation();
 }
 
@@ -19,6 +25,8 @@ void GUI::show()
 
 void GUI::renderLoop()
 {
+	//const sf::Time millisecondsBetweenFrames = sf::milliseconds(1000 / this->targetFramerate);
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -29,9 +37,9 @@ void GUI::renderLoop()
 			case sf::Event::Closed:
 				window.close();
 				break;
-			case sf::Event::Resized:
-				this->simulator.onWindowResized({ event.size.width, event.size.height });
-				break;
+				//case sf::Event::Resized:
+				//	this->simulator.onWindowResized({ event.size.width, event.size.height });
+				//	break;
 			case sf::Event::KeyReleased:
 				this->simulator.onKeyPressed(event.key.code);
 				break;
@@ -43,11 +51,14 @@ void GUI::renderLoop()
 		window.clear(sf::Color::White);
 		this->renderAllOjbects();
 		window.display();
+
+		//sf::sleep(millisecondsBetweenFrames);
 	}
 }
 
 void GUI::renderAllOjbects()
 {
 	this->simulator.update();
-	this->window.draw(this->simulator.getBall());
+	this->window.draw(*this->simulator.getBall());
+	this->window.draw(*this->simulator.getSeesaw());
 }
