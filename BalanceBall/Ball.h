@@ -22,7 +22,9 @@ public:
 	bool isOutOfBounds(sf::Vector2u screenSize);
 	void amplifyForce(float factor);
 	bool isMovingLeft();
+
 	const sf::Vector2f getPosition();
+	float getRadius();
 	void setYPosition(float newY);
 
 private:

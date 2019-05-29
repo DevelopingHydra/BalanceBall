@@ -59,6 +59,19 @@ void GUI::renderLoop()
 void GUI::renderAllOjbects()
 {
 	this->simulator.update();
-	this->window.draw(*this->simulator.getBall());
-	this->window.draw(*this->simulator.getSeesaw());
+	this->window.draw(*this->simulator.getSeesawShape());
+
+	// for debugging
+	// todo: remove later
+	Line seesawCenter = simulator.getSeesaw().getCenterLine();
+	sf::ConvexShape convex;
+	convex.setFillColor(sf::Color::Cyan);
+	convex.setPointCount(4);
+	convex.setPoint(0, seesawCenter.getPointA());
+	convex.setPoint(1, seesawCenter.getPointA() + sf::Vector2f{0, 30});
+	convex.setPoint(2, seesawCenter.getPointB() + sf::Vector2f{ 0, 30 });
+	convex.setPoint(3, seesawCenter.getPointB());
+	this->window.draw(convex);
+
+	this->window.draw(*this->simulator.getBallShape());
 }

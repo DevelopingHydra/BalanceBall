@@ -50,6 +50,11 @@ const sf::Vector2f Ball::getPosition()
 	return this->shape->getPosition();
 }
 
+float Ball::getRadius()
+{
+	return this->shape->getRadius();
+}
+
 void Ball::setYPosition(float newY)
 {
 	this->shape->setPosition(this->shape->getPosition().x, newY);
@@ -64,5 +69,5 @@ const std::ostream & operator<<(std::ostream & strm, Ball & ball)
 {
 	return strm << "BALL:\tacc: {" << ball.acceleration.x << "," << ball.acceleration.y << "} - speed: {"
 		<< ball.speed.x << "," << ball.speed.y
-		<< "} - pos: {" << ball.getShape()->getPosition().x << "," << ball.getShape()->getPosition().y << "}\n";
+		<< "} - pos: {" << ball.getShape()->getPosition().x << "," << ball.getShape()->getPosition().y << "}" << std::endl;
 }

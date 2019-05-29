@@ -5,6 +5,7 @@
 
 #include "IGameObject.h"
 #include "PID.h"
+#include "Line.h"
 
 class Seesaw :public IGameObject
 {
@@ -23,6 +24,7 @@ public:
 	void setMaxAngle(float maxAngle);
 
 	const float getAngle();
+	const Line getCenterLine();
 
 private:
 	std::shared_ptr<sf::RectangleShape> rect;

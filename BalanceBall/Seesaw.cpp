@@ -2,10 +2,13 @@
 #include <string>
 #include <iostream>
 
-Seesaw::Seesaw(sf::Vector2u screenSize, float max_angle, float max_angle_diff) : 
+#define _USE_MATH_DEFINES 
+#include <math.h>
+
+Seesaw::Seesaw(sf::Vector2u screenSize, float max_angle, float max_angle_diff) :
 	screenSize{ screenSize },
 	max_angle{ max_angle },
-	max_angle_diff{max_angle_diff}
+	max_angle_diff{ max_angle_diff }
 {
 	this->rect = std::make_shared<sf::RectangleShape>(sf::RectangleShape({ 0,0 }));
 	this->reset(screenSize);
@@ -40,7 +43,7 @@ const std::shared_ptr<sf::Shape> Seesaw::getShape()
 void Seesaw::changeAngle(float change)
 {
 	if (change > this->max_angle_diff || change < -this->max_angle_diff) { // todo betrag
-		std::cout << "\tERROR:\tangle change exceeds max angle change --> clipping\n";
+		std::cout << "\tERROR:\tangle change exceeds max angle change --> clipping" << std::endl;
 		if (change > this->max_angle_diff)
 			change = this->max_angle_diff;
 		else if (change < -this->max_angle_diff)
@@ -51,7 +54,7 @@ void Seesaw::changeAngle(float change)
 
 	if (newAngle > this->max_angle || newAngle < -this->max_angle) { // todo betrag
 		//throw std::exception("angle change exceed max angle");
-		std::cout << "\tERROR:\tangle exceeds max angle --> clipping\n";
+		std::cout << "\tERROR:\tangle exceeds max angle --> clipping" << std::endl;
 		if (newAngle > this->max_angle)
 			newAngle = this->max_angle;
 		else if (newAngle < -this->max_angle)
@@ -72,9 +75,19 @@ const float Seesaw::getAngle()
 	return this->angle;
 }
 
+const Line Seesaw::getCenterLine()
+{
+	float dy = (float)sin(this->angle*M_PI / 180)*this->rect->getLocalBounds().width / 2;
+	float dx = (float)cos(this->angle*M_PI / 180)*this->rect->getLocalBounds().width / 2;
+	sf::Vector2f seesawRight = this->rect->getPosition() + sf::Vector2f{ dx,dy };
+	sf::Vector2f seesawLeft = this->rect->getPosition() - sf::Vector2f{ dx,dy };
+
+	return Line{ seesawLeft,seesawRight };
+}
+
 const std::ostream & operator<<(std::ostream & strm, Seesaw & seesaw)
 {
 	return strm << "SEESAW:\tpos: {" << seesaw.getShape()->getPosition().x << "," << seesaw.getShape()->getPosition().y << "}"
 		<< " - angle: " << seesaw.angle
-		<< " - orig: {" << seesaw.getShape()->getOrigin().x << ", " << seesaw.getShape()->getOrigin().y << "}\n";
+		<< " - orig: {" << seesaw.getShape()->getOrigin().x << ", " << seesaw.getShape()->getOrigin().y << "}" << std::endl;
 }

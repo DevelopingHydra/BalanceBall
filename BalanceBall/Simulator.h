@@ -17,8 +17,11 @@ public:
 	void resetSimulation();
 	void onKeyPressed(char keyCode);
 
-	std::shared_ptr<sf::Shape> getBall();
-	std::shared_ptr<sf::Shape> getSeesaw();
+	std::shared_ptr<sf::Shape> getBallShape();
+	std::shared_ptr<sf::Shape> getSeesawShape();
+
+	Seesaw& getSeesaw(); // todo remove
+
 private:
 	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of draw-coordinate system
 	Ball ball;
@@ -30,7 +33,8 @@ private:
 
 	void pushBallLeft();
 	void pushBallRight();
-	sf::Vector2f calcAccelerationOfBall();
+	sf::Vector2f calcAccelerationOfBall(bool includeGravity);
 	float calcBallYPosition();
+	bool isBallOnSeesaw();
 };
 
