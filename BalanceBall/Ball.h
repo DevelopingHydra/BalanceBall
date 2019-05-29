@@ -23,6 +23,7 @@ public:
 	void amplifyForce(float factor);
 	bool isMovingLeft();
 	const sf::Vector2f getPosition();
+	void setYPosition(float newY);
 
 private:
 	std::shared_ptr<sf::CircleShape> shape;

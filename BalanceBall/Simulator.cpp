@@ -1,16 +1,15 @@
 #include "Simulator.h"
 #include <iostream>
+#include <math.h>
 
-Simulator::Simulator(sf::Vector2u screenSize)
-	:currentScreenSize{ screenSize },
+const float PI = 3.141592653589793238463; // todo
+
+Simulator::Simulator(sf::Vector2u screenSize) :
+	currentScreenSize{ screenSize },
 	ball{ screenSize },
-	seesaw{ screenSize, 45, 10 },
+	seesaw{ screenSize, 45, 45 / 2 },
 	isRunning{ true },
 	pidController{}
-{
-}
-
-Simulator::~Simulator()
 {
 }
 
@@ -18,22 +17,22 @@ void Simulator::update()
 {
 	if (this->isRunning) {
 
-		sf::Vector2f ballVelocity = sf::Vector2f{
-			gravity.y * sin(this->seesaw.getAngle()) * (-1),
-			//gravity.y * cos(this->seesaw.angle)
-			0
-		};
+		sf::Vector2f ballVelocity = this->calcAccelerationOfBall();
 		std::cout << "ball force: " << ballVelocity.x << "\n";
 		this->ball.applyForce(ballVelocity);
 
-		float newAngle = this->pidController.calculateAngle(this->ball.getPosition().x, 800 / 2); // todo width
+		// update angle of seesaw
+		float newAngle = this->pidController.calculateAngle(this->ball.getPosition().x, this->currentScreenSize.x / 2);
 		if (newAngle != 0)
 			this->seesaw.changeAngle(newAngle);
+
+		// update Y position of ball
+		this->ball.setYPosition(this->calcBallYPosition());
 
 		std::cout << this->seesaw;
 		std::cout << this->ball;
 		this->ball.update();
-		//this->seesaw.update();
+		//this->seesaw.update(); // unused
 
 		if (this->ball.isOutOfBounds(this->currentScreenSize)) {
 			std::cout << "ERROR, ball out of bounds\n";
@@ -42,10 +41,26 @@ void Simulator::update()
 	}
 }
 
+float calcBallYPosition() {
+	// use seesaw vector as geradengleichung
+	// then input the x and get the y of this line
+	// subtract the width/2 of seesaw and ball radius from that
+}
+
+sf::Vector2f Simulator::calcAccelerationOfBall() {
+	float ballAccelerationMagnitude = gravity.y * sin(this->seesaw.getAngle()*PI / 180);
+	return sf::Vector2f{
+		ballAccelerationMagnitude * cos(this->seesaw.getAngle()*PI / 180),
+		//ballAccelerationMagnitude*sin(this->seesaw.getAngle()*PI / 180) // not used
+		0
+	};
+}
+
 void Simulator::resetSimulation()
 {
 	this->ball.reset(this->currentScreenSize);
 	this->seesaw.reset(this->currentScreenSize);
+	this->pidController.reset();
 	this->isRunning = true;
 	std::cout << "Resetting simulation\n";
 }

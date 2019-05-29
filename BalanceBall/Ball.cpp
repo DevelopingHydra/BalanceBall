@@ -50,6 +50,11 @@ const sf::Vector2f Ball::getPosition()
 	return this->shape->getPosition();
 }
 
+void Ball::setYPosition(float newY)
+{
+	this->shape->setPosition(this->shape->getPosition().x, newY);
+}
+
 const std::shared_ptr<sf::Shape> Ball::getShape()
 {
 	return this->shape;

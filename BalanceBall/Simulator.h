@@ -11,7 +11,6 @@ class Simulator
 {
 public:
 	Simulator(sf::Vector2u screenSize);
-	~Simulator();
 
 	void onWindowResized(sf::Vector2u newScreenSize);
 	void update();
@@ -31,5 +30,7 @@ private:
 
 	void pushBallLeft();
 	void pushBallRight();
+	sf::Vector2f calcAccelerationOfBall();
+	float calcBallYPosition();
 };
 

@@ -4,11 +4,6 @@ PID::PID()
 {
 }
 
-
-PID::~PID()
-{
-}
-
 double PID::calculateAngle(double ballLocation, double targetBallPosition)
 {
 	double y = 0;
@@ -34,4 +29,11 @@ double PID::calculateAngle(double ballLocation, double targetBallPosition)
 	}
 
 	return y;
+}
+
+void PID::reset()
+{
+	this->e = 0;
+	this->esum = 0;
+	this->ealt = 0;
 }
