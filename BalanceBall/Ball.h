@@ -9,7 +9,6 @@ class Ball :public IGameObject
 {
 public:
 	Ball(sf::Vector2u screenSize);
-	~Ball();
 
 	void applyForce(sf::Vector2f force);
 
@@ -20,7 +19,10 @@ public:
 	virtual const std::shared_ptr<sf::Shape> getShape() override;
 	friend const std::ostream & operator<<(std::ostream & strm,  Ball &ball);
 
-	bool isOutOfBounce(sf::Vector2u screenSize);
+	bool isOutOfBounds(sf::Vector2u screenSize);
+	void amplifyForce(float factor);
+	bool isMovingLeft();
+	const sf::Vector2f getPosition();
 
 private:
 	std::shared_ptr<sf::CircleShape> shape;

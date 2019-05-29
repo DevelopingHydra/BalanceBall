@@ -131,6 +131,7 @@
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PID.cpp" />
     <ClCompile Include="Seesaw.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="PID.h" />
     <ClInclude Include="Seesaw.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="stdafx.h" />

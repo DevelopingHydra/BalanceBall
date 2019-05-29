@@ -9,10 +9,6 @@ Ball::Ball(sf::Vector2u screenSize) :shape{ }
 	this->shape->setFillColor(sf::Color::Blue);
 }
 
-Ball::~Ball()
-{
-}
-
 void Ball::applyForce(sf::Vector2f force)
 {
 	this->acceleration += force;
@@ -33,13 +29,26 @@ void Ball::reset(sf::Vector2u screenSize)
 	this->speed = { 0,0 };
 }
 
-
-bool Ball::isOutOfBounce(sf::Vector2u screenSize)
+bool Ball::isOutOfBounds(sf::Vector2u screenSize)
 {
 	auto pos = shape->getPosition();
 	return pos.x < 0 || pos.x > screenSize.x || pos.y < 0 || pos.y > screenSize.y;
 }
 
+void Ball::amplifyForce(float factor)
+{
+	this->acceleration *= factor;
+}
+
+bool Ball::isMovingLeft()
+{
+	return this->acceleration.x < 0;
+}
+
+const sf::Vector2f Ball::getPosition()
+{
+	return this->shape->getPosition();
+}
 
 const std::shared_ptr<sf::Shape> Ball::getShape()
 {

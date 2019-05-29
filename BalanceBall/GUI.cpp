@@ -52,7 +52,7 @@ void GUI::renderLoop()
 		this->renderAllOjbects();
 		window.display();
 
-		//sf::sleep(millisecondsBetweenFrames);
+		sf::sleep(sf::Time{ sf::milliseconds(100) });
 	}
 }
 

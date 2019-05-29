@@ -4,11 +4,12 @@
 #include <memory>
 
 #include "IGameObject.h"
+#include "PID.h"
 
 class Seesaw :public IGameObject
 {
 public:
-	Seesaw(sf::Vector2u screenSize, float max_angle);
+	Seesaw(sf::Vector2u screenSize, float max_angle, float max_angle_diff);
 	~Seesaw();
 
 	// Inherited via IGameObject
@@ -21,14 +22,15 @@ public:
 	void changeAngle(float change);
 	void setMaxAngle(float maxAngle);
 
+	const float getAngle();
+
 private:
 	std::shared_ptr<sf::RectangleShape> rect;
-
 	sf::Vector2u screenSize;
 
-	float angle;
 	float max_angle;
 	float max_angle_diff;
+	float angle;
 
 };
 

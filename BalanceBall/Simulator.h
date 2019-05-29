@@ -5,6 +5,7 @@
 
 #include "Ball.h"
 #include "Seesaw.h"
+#include "PID.h"
 
 class Simulator
 {
@@ -23,6 +24,7 @@ private:
 	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of draw-coordinate system
 	Ball ball;
 	Seesaw seesaw;
+	PID pidController;
 
 	sf::Vector2u currentScreenSize;
 	bool isRunning;
