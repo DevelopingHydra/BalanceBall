@@ -14,9 +14,9 @@ Simulator::Simulator(sf::Vector2u screenSize) :
 {
 }
 
-void Simulator::update()
+void Simulator::update(bool force = false)
 {
-	if (this->isRunning) {
+	if (this->isRunning || force) {
 		bool isBallAboveSeesaw = this->isBallOnSeesaw();
 
 		sf::Vector2f ballVelocity = this->calcAccelerationOfBall(isBallAboveSeesaw);
@@ -53,7 +53,7 @@ float Simulator::calcBallYPosition() {
 	Line seesawParallel = this->seesaw.getCenterLine();
 
 	sf::Vector2f intersection = seesawParallel.cross(ballVertical);
-	//intersection.y -= this->ball.getRadius() + this->seesaw.getShape()->getLocalBounds().height *sin(this->seesaw.getAngle()*M_PI / 180);
+	//intersection.y -= this->ball.getRadius() + this->seesaw.getShape()->getLocalBounds().height * sin(this->seesaw.getAngle()*M_PI / 180);
 
 	std::cout << "--> intersection point: [" << intersection.x << ", " << intersection.y << "]" << std::endl;
 
@@ -104,14 +104,23 @@ void Simulator::onKeyPressed(char keyCode)
 	case 71: // arrow left
 		this->pushBallLeft();
 		break;
-	case 73:
+	case 73: // arrow
 		this->seesaw.changeAngle(10);
 		break;
-	case 74:
+	case 74: // arrow
 		this->seesaw.changeAngle(-10);
 		break;
+	case 15:
+		this->isRunning = !this->isRunning;
+		std::cout << "Pressed PAUSE" << std::endl;
+		break;
+	case 18:
+		if (!isRunning) {
+			this->update(true);
+		}
+		break;
 	default:
-		std::cout << "!!! unrecognized key code!" << std::endl;
+		std::cout << "!!! unrecognized key code!\t>" << (int)keyCode << "<" << std::endl;
 	}
 }
 
@@ -128,6 +137,11 @@ std::shared_ptr<sf::Shape> Simulator::getSeesawShape()
 Seesaw & Simulator::getSeesaw()
 {
 	return this->seesaw;
+}
+
+Ball & Simulator::getBall()
+{
+	return this->ball;
 }
 
 void Simulator::pushBallLeft()

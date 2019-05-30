@@ -12,8 +12,7 @@ class Simulator
 public:
 	Simulator(sf::Vector2u screenSize);
 
-	void onWindowResized(sf::Vector2u newScreenSize);
-	void update();
+	void update(bool force);
 	void resetSimulation();
 	void onKeyPressed(char keyCode);
 
@@ -21,6 +20,7 @@ public:
 	std::shared_ptr<sf::Shape> getSeesawShape();
 
 	Seesaw& getSeesaw(); // todo remove
+	Ball& getBall(); // todo remove
 
 private:
 	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of draw-coordinate system

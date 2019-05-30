@@ -35,12 +35,12 @@ sf::Vector2f Line::cross(Line other)
 	}
 }
 
-const sf::Vector2f& Line::getPointA()
+const sf::Vector2f& Line::getPointA() const
 {
 	return this->pointA;
 }
 
-const sf::Vector2f & Line::getPointB()
+const sf::Vector2f & Line::getPointB() const
 {
 	return this->pointB;
 }

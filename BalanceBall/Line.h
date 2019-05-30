@@ -9,8 +9,8 @@ public:
 
 	sf::Vector2f cross(Line other);
 
-	const sf::Vector2f& getPointA();
-	const sf::Vector2f& getPointB();
+	const sf::Vector2f& getPointA() const;
+	const sf::Vector2f& getPointB() const;
 
 private:
 	sf::Vector2f pointA;

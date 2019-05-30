@@ -58,7 +58,7 @@ void GUI::renderLoop()
 
 void GUI::renderAllOjbects()
 {
-	this->simulator.update();
+	this->simulator.update(false);
 	this->window.draw(*this->simulator.getSeesawShape());
 
 	// for debugging
@@ -74,4 +74,30 @@ void GUI::renderAllOjbects()
 	this->window.draw(convex);
 
 	this->window.draw(*this->simulator.getBallShape());
+
+	auto ballShape = this->simulator.getBallShape();
+	sf::CircleShape bb(2.0f);
+	bb.setFillColor(sf::Color::Yellow);
+	bb.setPosition(this->simulator.getBall().getPosition());
+	this->window.draw(bb);
+
+	auto ball = this->simulator.getBall();
+	Line ballVertical = Line{
+		sf::Vector2f{ball.getPosition().x, 0.0f},
+		sf::Vector2f{ball.getPosition().x, (float)WINDOW_HEIGHT}
+	};
+
+	Line seesawParallel = this->simulator.getSeesaw().getCenterLine();
+
+	sf::Vector2f intersection = seesawParallel.cross(ballVertical);
+	sf::CircleShape bb2(5.0f);
+	bb2.setFillColor(sf::Color::Green);
+	bb2.setPosition(intersection);
+	this->window.draw(bb2);
+
+	sf::CircleShape bb3(5.0f);
+	bb3.setFillColor(sf::Color::Black);
+	bb3.setPosition(WINDOW_WIDTH/2, intersection.y);
+	this->window.draw(bb3);
+	
 }

@@ -23,15 +23,16 @@ void Ball::update()
 
 void Ball::reset(sf::Vector2u screenSize)
 {
-	this->shape->setPosition(screenSize.x / 2.f, screenSize.y / 2.f);
 	this->shape->setRadius(screenSize.x / 40.f);
+	auto radius = this->shape->getRadius();
+	this->shape->setPosition(screenSize.x / 2.f - radius, screenSize.y / 2.f - radius);
 	this->acceleration = { 0,0 };
 	this->speed = { 0,0 };
 }
 
 bool Ball::isOutOfBounds(sf::Vector2u screenSize)
 {
-	auto pos = shape->getPosition();
+	auto pos = this->getPosition();
 	return pos.x < 0 || pos.x > screenSize.x || pos.y < 0 || pos.y > screenSize.y;
 }
 
@@ -47,7 +48,8 @@ bool Ball::isMovingLeft()
 
 const sf::Vector2f Ball::getPosition()
 {
-	return this->shape->getPosition();
+	float radius = this->shape->getRadius();
+	return this->shape->getPosition() + sf::Vector2f{ radius,radius };
 }
 
 float Ball::getRadius()
