@@ -5,6 +5,8 @@ A small C++ simulation with a PID-controller
 ## ToDo
 
 - make everything use metric values
+- add optimiser (using gradient descent)
+- write unit tests
 
 ## Questions
 
