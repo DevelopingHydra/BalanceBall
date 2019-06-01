@@ -6,33 +6,32 @@
 #include "IGameObject.h"
 #include "PID.h"
 #include "Line.h"
+#include "Seesaw_settings.h"
 
 class Seesaw :public IGameObject
 {
 public:
-	Seesaw(sf::Vector2u screenSize, float max_angle, float max_angle_diff);
-	~Seesaw();
+	Seesaw(sf::Vector2u screenSize, Seesaw_settings settings);
 
 	// Inherited via IGameObject
-	//virtual void onScreenResized(sf::Vector2u oldSize, sf::Vector2u newSize) override;
 	virtual void update() override;
 	virtual void reset(sf::Vector2u screenSize) override;
-	virtual const std::shared_ptr<sf::Shape> getShape() override;
+	virtual const std::shared_ptr<sf::Shape> get_shape() override;
 	friend const std::ostream & operator<<(std::ostream & strm, Seesaw &seesaw);
 
-	void changeAngle(float change);
-	void setMaxAngle(float maxAngle);
+	void change_angle(float change);
 
-	const float getAngle();
-	const Line getCenterLine();
+	const float get_angle();
+	const Line get_center_line();
 
 private:
 	std::shared_ptr<sf::RectangleShape> rect;
 	sf::Vector2u screenSize;
 
-	float max_angle;
-	float max_angle_diff;
-	float angle;
+	float width_;
+	float max_angle_;
+	float max_angle_diff_;
+	float angle_;
 
 };
 

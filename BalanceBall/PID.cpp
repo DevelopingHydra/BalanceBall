@@ -1,10 +1,13 @@
 #include "PID.h"
 
-PID::PID()
+PID::PID(PID_settings settings) :
+	kd{ settings.D },
+	ki{ settings.I },
+	kp{ settings.P }
 {
 }
 
-double PID::calculateAngle(double ballLocation, double targetBallPosition)
+double PID::calculate_angle(double ballLocation, double targetBallPosition)
 {
 	double y = 0;
 	e = targetBallPosition - ballLocation;

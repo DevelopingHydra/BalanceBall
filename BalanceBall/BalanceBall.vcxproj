@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -139,11 +140,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="FileManager.h" />
+    <ClInclude Include="IController.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="PID.h" />
+    <ClInclude Include="PID_settings.h" />
     <ClInclude Include="Seesaw.h" />
+    <ClInclude Include="Seesaw_settings.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

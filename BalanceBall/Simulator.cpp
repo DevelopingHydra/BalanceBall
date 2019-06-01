@@ -4,76 +4,82 @@
 #include <math.h>
 
 #include "Line.h"
+#include "FileManager.h"
+#include "PID.h"
 
 Simulator::Simulator(sf::Vector2u screenSize) :
-	currentScreenSize{ screenSize },
-	ball{ screenSize },
-	seesaw{ screenSize, 45, 45 / 2 },
+	currentScreenSize_{ screenSize },
+	ball_{ screenSize },
+	seesaw_{ screenSize, FileManager::get_instance().read_settings_seesaw() },
 	isRunning{ true },
-	pidController{},
-	isControllerEnabled{ true }
+	//pidController{ PID{ FileManager::get_instance().read_settings_PID()} },
+	isControllerEnabled_{ true }
 {
+	PID pid{ FileManager::get_instance().read_settings_PID() };
+	//std::unique_ptr<IController> controller;
+	//controller = std::make_unique<PID>(pid);
+	this->pidController_ = std::make_unique<PID>(PID{ FileManager::get_instance().read_settings_PID() });
 }
 
 void Simulator::update(bool force = false)
 {
 	if (this->isRunning || force) {
-		bool isBallAboveSeesaw = this->isBallOnSeesaw();
+		bool isBallAboveSeesaw = this->is_ball_on_seesaw();
 
-		sf::Vector2f ballVelocity = this->calcAccelerationOfBall(isBallAboveSeesaw);
+		sf::Vector2f ballVelocity = this->calc_acceleration_of_ball(isBallAboveSeesaw);
 		std::cout << "ball force: " << ballVelocity.x << std::endl;
-		this->ball.applyForce(ballVelocity);
+		this->ball_.apply_force(ballVelocity);
 
-		std::cout << this->seesaw;
-		std::cout << this->ball;
-		this->ball.update();
+		std::cout << this->seesaw_;
+		std::cout << this->ball_;
+		this->ball_.update();
 
 		if (isBallAboveSeesaw) {
-			if (this->isControllerEnabled) {
-				float newAngle = this->pidController.calculateAngle(this->ball.getPosition().x, this->currentScreenSize.x / 2);
+			if (this->isControllerEnabled_) {
+				float newAngle = this->pidController_->calculate_angle(this->ball_.get_position().x, this->currentScreenSize_.x / 2);
 				if (newAngle != 0)
-					this->seesaw.changeAngle(newAngle);
+					this->seesaw_.change_angle(newAngle);
 			}
 
 			// update the position of ball, because the ball is definitely on the seesaw
-			this->ball.setPosition(this->calcGuidedBallPosition());
+			this->ball_.set_position(this->calc_guided_ball_position());
 		}
 
-		if (this->ball.isOutOfBounds(this->currentScreenSize)) {
+		if (this->ball_.is_out_of_bounds(this->currentScreenSize_)) {
 			std::cout << "ERROR, ball out of bounds" << std::endl;
 			this->isRunning = false;
 		}
 	}
 }
 
-sf::Vector2f Simulator::calcGuidedBallPosition() {
+sf::Vector2f Simulator::calc_guided_ball_position() {
 	Line ballVertical = Line{
-		sf::Vector2f{this->ball.getPosition().x, 0.0f},
-		sf::Vector2f{this->ball.getPosition().x, (float)this->currentScreenSize.y}
+		sf::Vector2f{this->ball_.get_position().x, 0.0f},
+		sf::Vector2f{this->ball_.get_position().x, (float)this->currentScreenSize_.y}
 	};
 
-	Line seesawParallel = this->seesaw.getCenterLine();
+	Line seesawParallel = this->seesaw_.get_center_line();
 
 	sf::Vector2f intersection = seesawParallel.cross(ballVertical);
-	intersection.y -= this->ball.getRadius() + this->seesaw.getShape()->getLocalBounds().height  * abs(sin(this->seesaw.getAngle()*M_PI / 180));
+	intersection.y -= this->ball_.get_radius() + this->seesaw_.get_shape()->getLocalBounds().height  * abs(sin(this->seesaw_.get_angle()*M_PI / 180));
 
 	std::cout << "--> intersection point: [" << intersection.x << ", " << intersection.y << "]" << std::endl;
 
 	return intersection;
 }
 
-bool Simulator::isBallOnSeesaw()
+bool Simulator::is_ball_on_seesaw()
 {
-	Line seesawParallel = this->seesaw.getCenterLine();
+	Line seesawParallel = this->seesaw_.get_center_line();
 
-	return this->ball.getPosition().x > seesawParallel.getPointA().x && this->ball.getPosition().x < seesawParallel.getPointB().x;
+	return this->ball_.get_position().x > seesawParallel.get_point_a().x && this->ball_.get_position().x < seesawParallel.get_point_b().x;
 }
 
-sf::Vector2f Simulator::calcAccelerationOfBall(bool includeGravity) {
-	if (this->isBallOnSeesaw()) {
-		float ballAccelerationMagnitude = gravity.y * sin(this->seesaw.getAngle()*M_PI / 180);
+sf::Vector2f Simulator::calc_acceleration_of_ball(bool includeGravity) {
+	if (this->is_ball_on_seesaw()) {
+		float ballAccelerationMagnitude = gravity.y * sin(this->seesaw_.get_angle()*M_PI / 180);
 		return sf::Vector2f{
-			ballAccelerationMagnitude * (float)cos(this->seesaw.getAngle()*M_PI / 180),
+			ballAccelerationMagnitude * (float)cos(this->seesaw_.get_angle()*M_PI / 180),
 			0
 		};
 	}
@@ -85,33 +91,33 @@ sf::Vector2f Simulator::calcAccelerationOfBall(bool includeGravity) {
 	}
 }
 
-void Simulator::resetSimulation()
+void Simulator::reset_simulation()
 {
-	this->ball.reset(this->currentScreenSize);
-	this->seesaw.reset(this->currentScreenSize);
-	this->pidController.reset();
+	this->ball_.reset(this->currentScreenSize_);
+	this->seesaw_.reset(this->currentScreenSize_);
+	this->pidController_->reset();
 	this->isRunning = false;
-	this->isControllerEnabled = false;
+	this->isControllerEnabled_ = false;
 	std::cout << "Resetting simulation" << std::endl;
 }
 
-void Simulator::onKeyPressed(char keyCode)
+void Simulator::on_key_pressed(char keyCode)
 {
 	switch (keyCode) {
 	case 17: // 'r'
-		this->resetSimulation();
+		this->reset_simulation();
 		break;
 	case 72: // arrow right
-		this->pushBallRight();
+		this->push_Ball_right();
 		break;
 	case 71: // arrow left
-		this->pushBallLeft();
+		this->push_ball_left();
 		break;
 	case 73: // arrow
-		this->seesaw.changeAngle(10);
+		this->seesaw_.change_angle(10);
 		break;
 	case 74: // arrow
-		this->seesaw.changeAngle(-10);
+		this->seesaw_.change_angle(-10);
 		break;
 	case 15:
 		this->isRunning = !this->isRunning;
@@ -123,42 +129,32 @@ void Simulator::onKeyPressed(char keyCode)
 		}
 		break;
 	case 2:
-		this->isControllerEnabled = !this->isControllerEnabled;
+		this->isControllerEnabled_ = !this->isControllerEnabled_;
 		break;
 	default:
 		std::cout << "!!! unrecognized key code!\t>" << (int)keyCode << "<" << std::endl;
 	}
 }
 
-std::shared_ptr<sf::Shape> Simulator::getBallShape()
+std::shared_ptr<sf::Shape> Simulator::get_ball_shape()
 {
-	return this->ball.getShape();
+	return this->ball_.get_shape();
 }
 
-std::shared_ptr<sf::Shape> Simulator::getSeesawShape()
+std::shared_ptr<sf::Shape> Simulator::get_seesaw_shape()
 {
-	return this->seesaw.getShape();
+	return this->seesaw_.get_shape();
 }
 
-Seesaw & Simulator::getSeesaw()
+void Simulator::push_ball_left()
 {
-	return this->seesaw;
-}
-
-Ball & Simulator::getBall()
-{
-	return this->ball;
-}
-
-void Simulator::pushBallLeft()
-{
-	this->ball.applyForce({ -5,0 });
+	this->ball_.apply_force({ -5,0 });
 	std::cout << "push ball left" << std::endl;
 }
 
-void Simulator::pushBallRight()
+void Simulator::push_Ball_right()
 {
-	this->ball.applyForce({ 5,0 });
+	this->ball_.apply_force({ 5,0 });
 	std::cout << "push ball right" << std::endl;
 }
 

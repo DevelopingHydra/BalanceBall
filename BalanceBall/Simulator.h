@@ -5,7 +5,7 @@
 
 #include "Ball.h"
 #include "Seesaw.h"
-#include "PID.h"
+#include "IController.h"
 
 class Simulator
 {
@@ -13,29 +13,27 @@ public:
 	Simulator(sf::Vector2u screenSize);
 
 	void update(bool force);
-	void resetSimulation();
-	void onKeyPressed(char keyCode);
+	void reset_simulation();
+	void on_key_pressed(char keyCode);
 
-	std::shared_ptr<sf::Shape> getBallShape();
-	std::shared_ptr<sf::Shape> getSeesawShape();
+	std::shared_ptr<sf::Shape> get_ball_shape();
+	std::shared_ptr<sf::Shape> get_seesaw_shape();
 
 	bool isRunning;
-	Seesaw& getSeesaw(); // todo remove
-	Ball& getBall(); // todo remove
 
-	sf::Vector2f calcGuidedBallPosition(); // todo make private
+	sf::Vector2f calc_guided_ball_position(); // todo make private
 private:
-	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of draw-coordinate system
-	Ball ball;
-	Seesaw seesaw;
-	PID pidController;
+	const sf::Vector2f gravity{ 0, 9.81f }; // positive, because of coordinate system
+	Ball ball_;
+	Seesaw seesaw_;
+	std::unique_ptr<IController> pidController_;
 
-	sf::Vector2u currentScreenSize;
-	bool isControllerEnabled;
+	sf::Vector2u currentScreenSize_;
+	bool isControllerEnabled_;
 
-	void pushBallLeft();
-	void pushBallRight();
-	sf::Vector2f calcAccelerationOfBall(bool includeGravity);
-	bool isBallOnSeesaw();
+	void push_ball_left();
+	void push_Ball_right();
+	sf::Vector2f calc_acceleration_of_ball(bool includeGravity);
+	bool is_ball_on_seesaw();
 };
 

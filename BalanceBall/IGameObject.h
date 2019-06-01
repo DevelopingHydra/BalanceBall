@@ -10,6 +10,6 @@ public:
 	virtual void update() = 0;
 	virtual void reset(sf::Vector2u screenSize) = 0;
 
-	virtual const std::shared_ptr<sf::Shape> getShape() = 0;
+	virtual const std::shared_ptr<sf::Shape> get_shape() = 0;
 };
 

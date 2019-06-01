@@ -1,8 +1,8 @@
 #include "Line.h"
 
 Line::Line(sf::Vector2f pointA, sf::Vector2f pointB):
-	pointA{pointA},
-	pointB{pointB}
+	point_a_{pointA},
+	point_b_{pointB}
 {
 }
 
@@ -10,14 +10,14 @@ Line::Line(sf::Vector2f pointA, sf::Vector2f pointB):
 sf::Vector2f Line::cross(Line other)
 {
 	// Line AB represented as a1x + b1y = c1 
-	float a1 = this->pointB.y - this->pointA.y;
-	float b1 = this->pointA.x - this->pointB.x;
-	float c1 = a1 * (this->pointA.x) + b1 * (this->pointA.y);
+	float a1 = this->point_b_.y - this->point_a_.y;
+	float b1 = this->point_a_.x - this->point_b_.x;
+	float c1 = a1 * (this->point_a_.x) + b1 * (this->point_a_.y);
 
 	// Line CD represented as a2x + b2y = c2 
-	float a2 = other.pointB.y - other.pointA.y;
-	float b2 = other.pointA.x - other.pointB.x;
-	float c2 = a2 * (other.pointA.x) + b2 * (other.pointB.y);
+	float a2 = other.point_b_.y - other.point_a_.y;
+	float b2 = other.point_a_.x - other.point_b_.x;
+	float c2 = a2 * (other.point_a_.x) + b2 * (other.point_b_.y);
 
 	float determinant = a1 * b2 - a2 * b1;
 
@@ -35,12 +35,12 @@ sf::Vector2f Line::cross(Line other)
 	}
 }
 
-const sf::Vector2f& Line::getPointA() const
+const sf::Vector2f& Line::get_point_a() const
 {
-	return this->pointA;
+	return this->point_a_;
 }
 
-const sf::Vector2f & Line::getPointB() const
+const sf::Vector2f & Line::get_point_b() const
 {
-	return this->pointB;
+	return this->point_b_;
 }
