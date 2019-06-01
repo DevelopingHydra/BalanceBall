@@ -7,13 +7,16 @@ class GUI
 {
 public:
 	GUI();
-	~GUI();
 
 	void show();
 
 private:
 	sf::RenderWindow window;
 	Simulator simulator;
+
+	sf::Font robotoFont;
+	sf::Text infoText;
+	sf::Text pauseText;
 
 	const int targetFramerate = 30;
 

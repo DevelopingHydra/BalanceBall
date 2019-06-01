@@ -13,9 +13,9 @@ private:
 	double esum = 0;
 	double satLow = -90;
 	double satUp = 90;
-	double kp = .5f;
+	double kp = .2f;
 	double ki = 0;
-	double kd = 2;
+	double kd = 3;
 	double ta = 1;
 };
 

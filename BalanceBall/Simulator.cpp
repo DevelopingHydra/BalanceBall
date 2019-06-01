@@ -10,7 +10,8 @@ Simulator::Simulator(sf::Vector2u screenSize) :
 	ball{ screenSize },
 	seesaw{ screenSize, 45, 45 / 2 },
 	isRunning{ true },
-	pidController{}
+	pidController{},
+	isControllerEnabled{ true }
 {
 }
 
@@ -23,19 +24,20 @@ void Simulator::update(bool force = false)
 		std::cout << "ball force: " << ballVelocity.x << std::endl;
 		this->ball.applyForce(ballVelocity);
 
-		if (isBallAboveSeesaw) {
-			float newAngle = this->pidController.calculateAngle(this->ball.getPosition().x, this->currentScreenSize.x / 2);
-			if (newAngle != 0)
-				this->seesaw.changeAngle(newAngle);
-
-			// update Y position of ball, because the ball is definitely on the seesaw
-			this->ball.setYPosition(this->calcBallYPosition());
-		}
-
 		std::cout << this->seesaw;
 		std::cout << this->ball;
 		this->ball.update();
-		//this->seesaw.update(); // unused
+
+		if (isBallAboveSeesaw) {
+			if (this->isControllerEnabled) {
+				float newAngle = this->pidController.calculateAngle(this->ball.getPosition().x, this->currentScreenSize.x / 2);
+				if (newAngle != 0)
+					this->seesaw.changeAngle(newAngle);
+			}
+
+			// update the position of ball, because the ball is definitely on the seesaw
+			this->ball.setPosition(this->calcGuidedBallPosition());
+		}
 
 		if (this->ball.isOutOfBounds(this->currentScreenSize)) {
 			std::cout << "ERROR, ball out of bounds" << std::endl;
@@ -44,7 +46,7 @@ void Simulator::update(bool force = false)
 	}
 }
 
-float Simulator::calcBallYPosition() {
+sf::Vector2f Simulator::calcGuidedBallPosition() {
 	Line ballVertical = Line{
 		sf::Vector2f{this->ball.getPosition().x, 0.0f},
 		sf::Vector2f{this->ball.getPosition().x, (float)this->currentScreenSize.y}
@@ -53,11 +55,11 @@ float Simulator::calcBallYPosition() {
 	Line seesawParallel = this->seesaw.getCenterLine();
 
 	sf::Vector2f intersection = seesawParallel.cross(ballVertical);
-	//intersection.y -= this->ball.getRadius() + this->seesaw.getShape()->getLocalBounds().height * sin(this->seesaw.getAngle()*M_PI / 180);
+	intersection.y -= this->ball.getRadius() + this->seesaw.getShape()->getLocalBounds().height  * abs(sin(this->seesaw.getAngle()*M_PI / 180));
 
 	std::cout << "--> intersection point: [" << intersection.x << ", " << intersection.y << "]" << std::endl;
 
-	return intersection.y;
+	return intersection;
 }
 
 bool Simulator::isBallOnSeesaw()
@@ -88,7 +90,8 @@ void Simulator::resetSimulation()
 	this->ball.reset(this->currentScreenSize);
 	this->seesaw.reset(this->currentScreenSize);
 	this->pidController.reset();
-	this->isRunning = true;
+	this->isRunning = false;
+	this->isControllerEnabled = false;
 	std::cout << "Resetting simulation" << std::endl;
 }
 
@@ -118,6 +121,9 @@ void Simulator::onKeyPressed(char keyCode)
 		if (!isRunning) {
 			this->update(true);
 		}
+		break;
+	case 2:
+		this->isControllerEnabled = !this->isControllerEnabled;
 		break;
 	default:
 		std::cout << "!!! unrecognized key code!\t>" << (int)keyCode << "<" << std::endl;

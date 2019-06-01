@@ -26,6 +26,7 @@ public:
 	const sf::Vector2f getPosition();
 	float getRadius();
 	void setYPosition(float newY);
+	void setPosition(sf::Vector2f newPos);
 
 private:
 	std::shared_ptr<sf::CircleShape> shape;

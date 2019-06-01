@@ -62,6 +62,12 @@ void Ball::setYPosition(float newY)
 	this->shape->setPosition(this->shape->getPosition().x, newY);
 }
 
+void Ball::setPosition(sf::Vector2f newPos)
+{
+	float radius = this->shape->getRadius();
+	this->shape->setPosition(newPos - sf::Vector2f{ radius,radius });
+}
+
 const std::shared_ptr<sf::Shape> Ball::getShape()
 {
 	return this->shape;
